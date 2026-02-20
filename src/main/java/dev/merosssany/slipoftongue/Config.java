@@ -6,6 +6,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.minecraftforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -86,7 +87,7 @@ public class Config {
                 narration.put(word, narratorText);
             }
             
-            if (grammarMode.get()) {
+            if (ServerLifecycleHooks.getCurrentServer() != null) {
                 ModMessages.sendToAllPlayers(new GrammarSettingsPacket());
             }
         }

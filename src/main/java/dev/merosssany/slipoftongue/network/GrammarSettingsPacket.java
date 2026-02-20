@@ -40,7 +40,8 @@ public class GrammarSettingsPacket {
         NetworkEvent.Context context = contextSupplier.get();
         context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             VoskManager.stopListening();
-            VoskManager.createRecognition(words.split(","));
+            if (!words.trim().isEmpty()) VoskManager.createRecognition(words.split(","));
+            else VoskManager.createRecognition();
             Main.ClientModEvents.onPlayerLoggedIn(null);
         }));
         context.setPacketHandled(true);

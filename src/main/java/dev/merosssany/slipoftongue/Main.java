@@ -52,7 +52,7 @@ public class Main {
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onPlayerLoggedIn(ClientPlayerNetworkEvent.LoggingIn event) {
-            VoskManager.startListening(s -> {}, s -> ModMessages.sendToServer(new TextPacket(s)));
+            VoskManager.startListening();
         }
         
         @SubscribeEvent
@@ -66,8 +66,7 @@ public class Main {
         @SubscribeEvent
         public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
             if (event.getEntity() instanceof ServerPlayer player) {
-                if (Config.grammarMode.get())
-                    ModMessages.sendToPlayer(new GrammarSettingsPacket(), player);
+                ModMessages.sendToPlayer(new GrammarSettingsPacket(), player);
             }
         }
     }
