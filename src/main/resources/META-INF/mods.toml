@@ -67,5 +67,5 @@ modId="vosklib"
 mandatory=true
 versionRange="[1.1,)"
 ordering="AFTER"
-side="BOTH"
+side="CLIENT"
 
