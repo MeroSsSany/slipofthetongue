@@ -1,26 +1,61 @@
-# 🎵 Startup Music Tone
+<h1 style="text-align: center;">Slip of a Tongue</h1><p style="text-align: center;">Voice-controlled command execution for Minecraft.</p>
 
-**Transform your loading screen with a custom soundtrack.**
+**Slip of a Tongue** allows players to trigger server-side commands and custom narrations using their actual voice. By leveraging the **VoskLib** client-side speech recognition engine, your spoken words are translated to text locally and sent to the server for secure validation and execution.
 
----
-Startup Music Tone is a lightweight, high-performance utility mod that allows you to play your favorite music while the game loads. Whether you want a single epic theme or a randomized playlist of tracks, this mod handles it all with minimal impact on your system resources.
+***
 
----
-🚀 Key Features
-- **Universal Format Support**: Now supports both .mp3 and .ogg files.
-- **Smart Streaming**: Audio is streamed directly from your storage, keeping RAM usage near zero and ensuring fast load times.
-- **Dynamic Playlists**: Drop multiple files into the folder, and the mod will randomly select one to play each time you launch.
-- **Advanced Control**: Support for per-track volume and weighted probability (make certain songs rarer than others!).
+## 🎤 How it Works
 
----
-🛠 How to Use
-1. **Initialize**: Launch the game once and close it to generate the necessary folders.
-2. **Locate Folder**: Navigate to your modpack's config folder.
-3. **Add Music**: Find the music folder *(create it if it doesn't exist)* and drop your music files in.
-4. **Configure**: *(Optional)* Edit the generated config file to tweak volume levels and track rarity.
+1.  **The Client:** Uses **VoskLib** (locally) to turn your microphone input into a string of text.
+2.  **The Bridge:** The client sends this string to the server.
+3.  **The Server:** Validates the word against a pre-defined list. If it matches, the server executes the linked commands and narrations.
 
----
-📦 For Mod & Modpack Creators
-- **Modpacks**: You are free to include this mod in any modpack! No special permission is required, provided the mod remains open-source.
-- **Dependencies**: Any mod that builds upon this one must be open-source (GPL-compatible).
-- **License**: Protected under GNU GPL v3.0.
+***
+
+## 🛠 Installation
+
+### Client-Side (Required)
+
+1.  Install [VoskLib](https://www.curseforge.com/minecraft/mc-mods/vosklib).
+2.  Install **Slip of a Tongue**.
+3.  **Important:** Open the VoskLib config in-game _(by clicking Mods -> VoskLib -> Config)_ and download a language model for the speech recognition to work.
+4.  The voice recognition will be automatically enabled upon joining a world.
+
+### Server-Side (Required)
+
+1.  Install **Slip of a Tongue** (VoskLib is **not** required on the server).
+2.  Configure your word list in the server's config folder.
+
+***
+
+## ⚙️ Command Syntax
+
+The server-side configuration uses a specific format to map voice triggers:
+
+`word:[command1, command2, command3 %player%]text to narrate`
+
+### Breakdown:
+
+*   **`word`**: The keyword detected by the client's STT.
+*   **`[...]`**: A list of server commands (no `/` needed).
+*   **`%player%`**: Replaced by the name of the player who spoke.
+*   **`text to narrate`**: The message that will be narrated/sent back upon success.
+
+### Example Entry:
+
+> `ascend:[effect give %player% levitation 5 1, say %player% is ascending!]Up we go!`
+
+***
+
+## 🔒 Security & Privacy
+
+*   **Client-Side STT:** Speech processing is handled entirely on your computer via VoskLib. No audio data is ever sent to the server or the cloud.
+*   **Server-Side Validation:** To prevent players from spoofing commands, the server only executes actions for words explicitly defined in the server-side configuration file.
+
+***
+
+## 📜 Credits
+
+*   **VoskLib:** Created by [InfinityTwo](https://www.curseforge.com/members/infinitytwo/projects)
+*   **Speech Engine:** Powered by [Vosk](https://alphacephei.com/vosk/).
+*   **License:** GNU General Public License v3.0
