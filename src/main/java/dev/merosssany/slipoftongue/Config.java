@@ -1,12 +1,9 @@
 package dev.merosssany.slipoftongue;
 
-import dev.merosssany.slipoftongue.network.GrammarSettingsPacket;
-import dev.merosssany.slipoftongue.network.ModMessages;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -24,7 +21,6 @@ public class Config {
     
     static final ForgeConfigSpec.ConfigValue<List<? extends String>> commands;
     static final ForgeConfigSpec.BooleanValue forceNarrator;
-    static final ForgeConfigSpec.BooleanValue grammarMode;
     
     private static final Pattern pattern = Pattern.compile(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
     
@@ -39,10 +35,6 @@ public class Config {
         forceNarrator = CLIENT_BUILDER
                 .comment("Whenever to enable narrator even if the Narrator is set of OFF.")
                 .define("forceNarrator",false);
-        
-        grammarMode = SERVER_BUILDER
-                .comment("Enables grammar (confined lists) mode for VOSK for better accuracy.\n\nNOTE: It sends the forbidden words to the client.")
-                .define("grammarMode",true);
         
         SERVER_SPEC = SERVER_BUILDER.build();
         CLIENT_SPEC = CLIENT_BUILDER.build();
@@ -85,10 +77,6 @@ public class Config {
                 
                 String narratorText = rawList.replace(bracket, "");
                 narration.put(word, narratorText);
-            }
-            
-            if (ServerLifecycleHooks.getCurrentServer() != null) {
-                ModMessages.sendToAllPlayers(new GrammarSettingsPacket());
             }
         }
     }

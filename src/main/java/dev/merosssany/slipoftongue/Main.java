@@ -1,12 +1,11 @@
 package dev.merosssany.slipoftongue;
 
-import dev.merosssany.slipoftongue.network.GrammarSettingsPacket;
 import dev.merosssany.slipoftongue.network.ModMessages;
 import dev.merosssany.slipoftongue.network.TextPacket;
-import net.minecraft.server.level.ServerPlayer;
+import dev.merosssany.whisperlib.VoiceManager;
+import dev.merosssany.whisperlib.events.WhisperVoiceResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoader;
@@ -17,7 +16,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.infinitytwogames.vosklib.VoskManager;
 
 @Mod(Main.MODID)
 public class Main {
@@ -52,22 +50,18 @@ public class Main {
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onPlayerLoggedIn(ClientPlayerNetworkEvent.LoggingIn event) {
-            VoskManager.startListening();
+            VoiceManager.startListening();
         }
         
         @SubscribeEvent
         public static void onPlayerLoggedOut(ClientPlayerNetworkEvent.LoggingOut event) {
-            VoskManager.stopListening();
+            VoiceManager.stopListening();
         }
-    }
-    
-    @Mod.EventBusSubscriber(modid = Main.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-    public static class ServerModEvents {
+        
         @SubscribeEvent
-        public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
-            if (event.getEntity() instanceof ServerPlayer player) {
-                ModMessages.sendToPlayer(new GrammarSettingsPacket(), player);
-            }
+        public static void onResult(WhisperVoiceResult event) {
+            String result = event.getSpokenText().replaceAll("\\*.*?\\*","");
+            ModMessages.sendToServer(new TextPacket(result));
         }
     }
 }

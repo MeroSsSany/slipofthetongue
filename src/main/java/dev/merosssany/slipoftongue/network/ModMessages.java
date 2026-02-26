@@ -32,12 +32,6 @@ public class ModMessages {
                 .encoder(NarratorPacket::encode)
                 .consumerMainThread(NarratorPacket::handle)
                 .add();
-        
-        INSTANCE.messageBuilder(GrammarSettingsPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(GrammarSettingsPacket::new)
-                .encoder(GrammarSettingsPacket::encode)
-                .consumerMainThread(GrammarSettingsPacket::handle)
-                .add();
     }
     
     public static <MSG> void sendToServer(MSG message) {
